@@ -4,7 +4,7 @@ Arquitetura de referência ― **Interface Web + API + Worker + Notificador**
 
 > Repositório-exemplo que demonstra um fluxo completo de mensagens assíncronas com **RabbitMQ** e notificações em tempo-real via **Socket.IO**.
 
-![Diagrama de Sequência](./docs/sequence-diagram.png) <!-- opcional, adicione se criar a imagem -->
+![Diagrama de Sequência](./docs/sequence-diagram.svg) <!-- opcional, adicione se criar a imagem -->
 
 ---
 
