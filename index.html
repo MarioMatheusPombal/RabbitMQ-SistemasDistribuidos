@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Demo – Disparar Tarefa</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 2rem; }
+    label, textarea, button { display:block; margin:.5rem 0; font-size:1rem; }
+    textarea { width:100%; max-width:600px; }
+    #status { margin-top:1rem; font-weight:bold; }
+  </style>
+
+  <!-- Cliente Socket.IO -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+  <h1>Iniciar Tarefa Distribuída</h1>
+
+  <label for="payload">Dados da tarefa (JSON):</label>
+  <textarea id="payload" rows="6">{ "hello": "world" }</textarea>
+
+  <button id="sendBtn">Enviar</button>
+
+  <div id="status">Status: aguardando envio…</div>
+
+  <script>
+    /* ------------ Config ------------ */
+    const API_URL = "http://localhost:3000/jobs"; // endpoint HTTP
+    const WS_URL  = "http://localhost:3001";      // origem do Socket.IO
+
+    /* ------------ Socket.IO ------------ */
+    const socket = io(WS_URL, { transports: ["websocket"] });
+
+    socket.on("connect", () => console.log("Socket.IO conectado", socket.id));
+    socket.on("connect_error", err => console.error("Falha Socket.IO:", err.message));
+
+    socket.on("job_done", ({ jobId, result }) => {
+      setStatus(`tarefa ${jobId} concluída ✅`);
+      console.log("Resultado:", result);
+    });
+
+    /* ------------ Enviar tarefa ------------ */
+    document.getElementById("sendBtn").addEventListener("click", async () => {
+      let payload;
+      try {
+        payload = JSON.parse(document.getElementById("payload").value);
+      } catch (e) {
+        return setStatus("JSON inválido: " + e.message, true);
+      }
+
+      setStatus("enviando…");
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const { jobId } = await res.json();
+        setStatus(`tarefa ${jobId} enfileirada 📨`);
+      } catch (err) {
+        console.error(err);
+        setStatus("Erro ao enviar: " + err.message, true);
+      }
+    });
+
+    /* ------------ Helper ------------ */
+    function setStatus(text, isError = false) {
+      const el = document.getElementById("status");
+      el.textContent = "Status: " + text;
+      el.style.color = isError ? "crimson" : "black";
+    }
+  </script>
+</body>
+</html>
