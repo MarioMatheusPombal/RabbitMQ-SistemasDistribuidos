@@ -2,7 +2,7 @@
 
 Arquitetura de referência ― **Interface Web + API + Worker + Notificador**
 
-> Repositório-exemplo que demonstra um fluxo completo de mensagens assíncronas com **RabbitMQ** e notificações em tempo-real via **Socket.IO**.
+> Repositório que demonstra um fluxo completo de mensagens assíncronas com **RabbitMQ** e notificações em tempo-real via **Socket.IO**.
 
 ![Diagrama de Sequência](./docs/sequence-diagram.svg) <!-- opcional, adicione se criar a imagem -->
 
@@ -190,5 +190,5 @@ A interface continua sendo servida como arquivo estático; mantenha `index.html`
 
 ---
 
-> **Licença**: MIT – use à vontade e envie PRs!
+> **Licença**: MIT – use à vontade para fins educacionais e envie PRs!
 > **Contato**: [mariomatheuspombal@gmail.com](mailto:mariomatheuspombal@gmail.com)
